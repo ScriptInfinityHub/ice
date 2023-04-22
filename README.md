@@ -1,1 +1,73 @@
-# ice
+if not game:IsLoaded() then 
+    repeat game.Loaded:Wait()
+    until game:IsLoaded()
+end
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/vozoid/ui-libraries/main/drawing/void/source.lua"))()
+
+local watermark = library:Watermark(" MM2 | Infinity Support | v1 | dev")
+
+local main = library:Load{
+    Name = "Infinity Hub",
+    SizeX = 600,
+    SizeY = 650,
+    Theme = "Midnight",
+    Extension = "json",
+    Folder = "Infinity Hub"
+}
+
+
+local tab = main:Tab("Main")
+
+local section = tab:Section{
+    Name = "Main Killer",
+    Side = "Left"
+}
+
+local label = section:Label("Bring Players")
+
+section:Slider{
+    Text = "[value]/10",
+    Min = -10,
+    Max = 10,
+    Float = 0.25,
+    Flag = "Dis Player",
+    Callback = function(nu)
+        number = nu
+    end
+}
+
+
+Plr = {}
+for i,v in pairs(game:GetService("Players"):GetChildren()) do
+    table.insert(Plr,v.Name) 
+end
+section:Dropdown{Content = Plr,Flag = "Dropdown",Callback = function(t)
+        PlayerTP = t
+    end
+}
+
+section:Toggle{
+    Name = "Bring Player",
+    Flag = "Toggle",
+    Callback  = function(state)
+        _G.SD = state
+Target = PlayerTP -- Name
+NOW = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+wait()
+game.Workspace.CurrentCamera.CameraSubject = game.Players.LocalPlayer.Character
+game.Players.LocalPlayer.Character.Animate.Disabled = true
+wait()
+game.Players.LocalPlayer.Character.Animate.Disabled = false
+while _G.SD do wait()
+    pcall(function()
+game.Players[Target].Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,number)
+for i,v in pairs(game.Players:FindFirstChild(Target).Character:GetChildren()) do
+if v.ClassName == "Part" then
+       v.CanCollide = false
+    end
+end
+end)
+end
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = NOW
+end
+}
